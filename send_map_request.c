@@ -363,7 +363,7 @@ int send_map_request(s,nonce0,nonce1,before,eid_addr,iid,map_resolver_addr,my_ad
             memcpy(&map_request_eid->eid_prefix,
                     &(((struct sockaddr_in *)eid_addr)->sin_addr), sizeof(struct in_addr));
         }
-        iph->ip_sum			     = ip_checksum(packet,ip_len);
+        iph->ip_sum			     = ip_checksum(iph, iph->ip_hl);
     } else {
         map_request_eid->eid_mask_len	     = LISP_IPV6_MASK_LEN;
         if (iid >= 0) {

@@ -40,13 +40,19 @@
 #include	"lig.h"
 #include	"lig-external.h"
 
-ushort ip_checksum (buf, nwords)
+ushort ip_checksum (buf, ip_headerlength)
     unsigned short *buf;
-    int            nwords; 
+    int            ip_headerlength;
 {
     unsigned long sum;
 
-    for (sum = 0; nwords > 0; nwords--)
+    /*
+     * the header length is a multiple of 4 bytes.
+     * 'nshorts' refers to the number of 16 bit multiples.
+     */
+    unsigned int nshorts = ip_headerlength * 2;
+
+    for (sum = 0; nshorts > 0; nshorts--)
 	sum += *buf++;
     sum = (sum >> 16) + (sum & 0xffff);
     sum += (sum >> 16);
