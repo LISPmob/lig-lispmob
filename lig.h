@@ -19,7 +19,9 @@
  *	Instance ID support added by Lorand Jakab <lj@icanhas.net>
  *	Thu Jul 26 00:50:51 PDT 2012
  *
- *
+ * 	Map-Register and Non-encapsulated Map-Request Functionality added by Alexandru Iuhas <iuhas@ac.upc.edu>
+ * 	Mon May 27 17:00:20 2013,  Polytechnic University of Catalonia
+ * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     o Redistributions of source code must retain the above copyright
@@ -50,6 +52,7 @@
 
 #include	<stdio.h>
 #include	<unistd.h>
+#include 	<getopt.h>
 #include	<stdlib.h>
 #include	<errno.h>
 #include	<ctype.h>
@@ -81,6 +84,7 @@ typedef enum			{FALSE,TRUE} boolean;
 #define	MIN_MR_TIMEOUT		1	/* seconds */
 #define	MAX_MR_TIMEOUT		5	/* seconds */
 #define	LISP_MAP_RESOLVER	"LISP_MAP_RESOLVER"
+#define LISP_MAP_SERVER		"LISP_MAP_SERVER"			//NEW
 #define	LOOPBACK		"127.0.0.1"
 #define	LOOPBACK6		"::1"
 #define	LINK_LOCAL		"fe80"
@@ -93,8 +97,13 @@ typedef enum			{FALSE,TRUE} boolean;
 #define	MAX_EPHEMERAL_PORT	65535
 #define MAX_IID                 16777215
 
-#define	USAGE	"usage: %s [-b] [-c <count>] [-d] [-e] [-m <map resolver>] [-p <port>] \
-[-s <source address>] [-t <timeout>] [-u] [-v] <EID>\n"
+#define	USAGE	"      Usage:\nFor Map Request: %s [-b] [-c <count>] [-d] [-e] -m <RLOC> [-p <port>] \
+[-s <source address>] [-t <timeout>] [-u] [-v] [--probe] [--smr] [--smri] <EID>\n\nFor Encapsulated Map Request: ./lig [-b] \
+[-c <count>] [-d] [-e] -m <Map Resolver> [-p <port>] [-s <source address>] [-t <timeout>] [-u] [-v] [--mrauth] [--smri] <EID>\n \
+\nFor Map Register: ./lig -r -m <Map Server> --eidpref <EID> --eidmlen <EID mask length> --pass <password> \
+[--noproxy] [--mnot] [--recordttl <TTL>] [--notauth] [--mapvers <Map Version>] --locator <RLOC> \
+[--locpr <Priority>] [--locw <Weight>] [--locmpr <MPriority>] [--locmw <MWeight>] [--notreach] \
+--addloc [-v]\n\nFor more detailed information type man ./lig.1\n\n"		//modified
 
 /*
  *	VERSION 
@@ -257,8 +266,18 @@ struct map_request_pkt {
 	uchar           map_data_present:1;
 	uchar           rloc_probe:1;
 	uchar           smr_bit:1;
+
+
 #endif
-	uchar           reserved1;
+#ifdef LITTLE_ENDIAN
+	uchar           reserved1:6;
+	uchar		smr_invoked:1;
+	uchar		proxy_itr:1;
+#else
+	uchar		proxy_itr:1;
+	uchar		smr_invoked:1;
+	uchar           reserved1:6;
+#endif	
 #ifdef LITTLE_ENDIAN
 	ushort          irc:5;
         uchar           reserved2:3;
@@ -410,3 +429,5 @@ struct lisp_addrtype {
  */
 
 ushort emr_inner_src_port;
+
+

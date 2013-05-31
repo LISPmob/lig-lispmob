@@ -10,6 +10,9 @@
  *	David Meyer
  *	dmm@1-4-5.net
  *	Thu Apr  9 12:01:29 2009
+ * 
+ *  	Map-Register and Non-encapsulated Map-Request Functionality added by Alexandru Iuhas <iuhas@ac.upc.edu>
+ * 	Mon May 27 17:00:20 2013,  Polytechnic University of Catalonia
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -38,11 +41,17 @@
  *
  */
 
+
 extern  unsigned int	debug;
 extern	unsigned int	machinereadable;
 extern  unsigned int	disallow_eid;
 extern  unsigned int	udp_checksum_disabled;
 extern	ushort		emr_inner_src_port;
+
+	u_char		mrauth;	
+	u_char		smri;
+	u_char		probe;
+	u_char		smr;
 
 #ifdef BSD
 #include <string.h>

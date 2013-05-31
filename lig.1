@@ -13,11 +13,19 @@
 .\"
 
 
-.TH lig 1  "September 25, 2009" "Version 0.0" "USER COMMANDS"
+.TH lig 1  "May 26, 2013" "Version 2.0" "USER COMMANDS"
 .SH NAME
 lig \- LISP Internet Groper
 .SH SYNOPSIS
-.B lig [-b] [-d] <EID> -m <map resolver> [-c <count>] [-p <port>] [-t <timeout>] [-v]
+.TP
+.B lig
+[-b] [-d] <EID> -m <RLOC/Map Resolver/Server> --noencap [-c <count>] [-s <source>] [-t <timeout>] [-i <IID>] [-v] [--probe] [--smr] [--smri]
+.TP
+.B lig
+[-b] [-d] <EID> -m <RLOC/Map Resolver/Server> [-c <count>] [-s <source>] [-p <port>] [-t <timeout>] [-i <IID>] [-v] [--mrauth] [--smri]
+.TP
+.B lig
+-r -m <RLOC/Map Resolver/Server> --eidpref <EID> --eidmlen <Mask length> --pass <password> [--noproxy] [--mnot] [--recordttl <TTL>] [--notauth] [--mapvers <Map Version>] --locator <RLOC> [--locpr <Priority>] [--locw <Weight>] [--locmpr <MPriority>] [--locmw <MWeight>] [--notreach] --addloc [-v] 
 
 .SH DESCRIPTION
 The LISP Internet Groper (lig) 
@@ -30,20 +38,102 @@ Print scriptable output
 \-d
 display additional debug information
 .TP
-\-m <map resolver>
-Specify the Map Resolver to send the Encapsualted Map Request
-to. The Map Resolver can also be specified by setting the 
-LISP_MAP_RESOLVER enviornment variable to the name (or
-address) of a Map Resolver.
+\-r
+If specified, lig will send a Map Register message. If not, it 
+will send a Map Request/Encapsulated Map Request.
+.TP
+\-m <RLOC/Map Resolver/Server>
+Specify the destination RLOC, Map Resolver or Map Server to send the Map 
+Request, Encapsulated Map Request or Map Register respectively.
+The Map Resolver can also be specified by setting the LISP_MAP_RESOLVER 
+enviornment variable to the name (or address) of a Map Resolver.
+.TP
+\--noencap
+If specified, lig will send a Map Request. If not,  it will send
+an Encapsulated Map Request. 
 .TP
 \-c <count>
 Send <count> Map Requests before giving up. The default value is 3.
+.TP
+\-s <source>
+Specify the originating ITR-RLOC for the Map-Request/Encapsulated
+Map-Request message. If not specified it will be obtained automatically.
 .TP
 \-p <port>
 Set the source port of the inner (encapsulated) UDP header.
 .TP
 \-t <timeout>
 Set the time to wait for a Map Reply (in milliseconds).
+.TP
+\-i <IID>
+Use the specified Instance ID.
+.TP
+\--probe
+Set the Probe bit to indicate that a Map-Request SHOULD be treated 
+as a Locator reachability probe.
+.TP
+\--smr
+Set the Solicit-Map-Request (SMR) bit. It is cleared by default.
+.TP
+\--smri
+Set the SMR-invoked bit. It is cleared by default.
+.TP
+\--mrauth
+Set the Map-Request Authoritative bit if you want the destination 
+site to return the Map-Reply rather than the mapping database system.
+.TP
+\--eidpref <EID>
+Specify the EID prefix address for the Map Register function.. This 
+can be an IPv4 or IPv6 address.
+.TP
+\--eidmlen <Mask length>
+Specify the EID mask length. 
+Note: Mustn't be entered before the --eidpref option.
+.TP
+\--pass <password>
+Enter the Map Server password for the HMAC computation
+.TP
+\--noproxy
+Clear the Proxy Reply bit. It is set by default.
+.TP
+\--mnot
+Set the Want Map Notify bit. It is cleared by default.
+.TP
+\--recordttl <TTL>
+Specify the Record Time To Live.
+.TP
+\--notauth
+Clear the Authoritative bit. It is set by default.
+.TP
+\--mapvers <Map Version>
+Specify The Map Version number.
+.TP
+\--locator <RLOC>
+Specify the locator address. IPv4 and IPv6 supported.
+Note: Mustn't be entered before the --eidmlen option. 
+.TP
+\--locpr <Priority>
+Specify the locator Priority
+.TP
+\--locw <Weight>
+Specify the locator Weight
+.TP
+\--locmpr <MPriority>
+Specify the locator Multicast Priority
+.TP
+\--locmw <MWeight>
+Specify the locator Multicast Weight
+.TP
+\--notreach
+Clear the locator Reachable bit. It is set by default.
+.TP
+\--addloc
+Adds the locator with all the parameters specified 
+between the --locator and the --addloc options and
+resets the parameters to their default values for the
+next locator.
+Note: The --locator and --addloc options must be specified
+for each additional locator entry. 
 .TP
 \-v
 Print the lig version. The version string is of the form XXYYZZ
@@ -53,6 +143,9 @@ specification version, and ZZ is the lig code verison.
 .TP
 .PP
 .SH Source Code
-http://github.com/davidmeyer/lig
+http://github.com/alexiuhas/lig
 .SH AUTHOR
+.IP
 David Meyer (dmm at 1-4-5.net)
+.IP
+Alexandru Iuhas

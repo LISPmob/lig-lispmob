@@ -8,6 +8,9 @@
 #	dmm@1-4-5.net
 #	Wed Apr  8 13:36:24 2009
 #
+# 	Map-Register and Non-encapsulated Map-Request Functionality added by Alexandru Iuhas <iuhas@ac.upc.edu>
+# 	Mon May 27 17:00:20 2013,  Polytechnic University of Catalonia
+#
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -35,8 +38,14 @@
 #	$Header: /mnt/disk1/dmm/src/lig/RCS/Makefile,v 1.1 2010/11/14 20:49:29 dmm Exp $
 #
 
-SRC      = lig.c send_map_request.c lib.c cksum.c print.c get_my_ip_addr.c
-INC	 = lig.h lig-external.h
+
+SRC      = lig.c send_map_request.c lib.c cksum.c print.c get_my_ip_addr.c \
+	   lispmob/lispd_config.c lispmob/lispd_lib.c lispmob/lispd_locator.c lispmob/lispd_log.c \
+	   lispmob/lispd_mapping.c lispmob/lispd_map_register.c lispmob/lispd_pkt_lib.c \
+	   lispmob/lispd_sockets.c lispmob/lispd_iface_list.c
+INC	 = lig.h lig-external.h lispmob/lispd_external.h lispmob/lispd.h lispmob/lispd_lib.h lispmob/lispd_log.h  \
+	   lispmob/lispd_locator.h lispmob/lispd_map_register.h  lispmob/lispd_mapping.h  \
+	   lispmob/lispd_pkt_lib.h lispmob/lispd_sockets.h lispmob/lispd_iface_list.h
 OBJ	 = $(SRC:%.c=%.o)
 EXE      = lig
 #
@@ -56,7 +65,7 @@ MISC     = Makefile README
 #
 CC	 = gcc
 CFLAGS   = -Wall -Wno-implicit-function-declaration
-LDLIBS   = 
+LDLIBS   = -lcrypto -lssl -lrt -lm
 LDFLAGS  = 
 #
 #
@@ -67,5 +76,5 @@ ${MAN}: ${MANSRC}
 	groff -t -e -mandoc -Tascii ${MANSRC} | col -bx > ${MANOUT}
 
 clean:
-	/bin/rm -f ${OBJ} ${EXE} ${MANOUT} core a.out Make.log Make.err *~
+	/bin/rm -f *.o lispmob/*.o ${EXE} ${MANOUT} core a.out Make.log Make.err *~ lispmob/*~
 
