@@ -54,19 +54,12 @@ extern  char            *proxy_itr;
 extern  char            msg[];
 extern  int             map_request_retries;
 extern  int             control_port;
-static	int             debug_level		= -1;					//modified
-static	int             daemonize		= FALSE;				//modified
-static	int             default_rloc_afi	= -1;					//modified
-
 extern  int         netlink_fd;
 extern  int         ipv6_data_input_fd;
 extern  int         ipv4_data_input_fd;
 extern  int         ipv6_control_input_fd;
 extern  int         ipv4_control_input_fd;
 extern  int         timers_fd;
-#ifdef LISPMOBMH
-extern  int			smr_timer_fd;
-#endif
 extern  struct  sockaddr_nl dst_addr;
 extern  struct  sockaddr_nl src_addr;
 extern  nlsock_handle       nlh;

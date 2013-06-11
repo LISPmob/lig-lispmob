@@ -40,7 +40,7 @@
  */
 typedef struct lispd_locator_elt_ {
     lisp_addr_t                 *locator_addr;
-    uint8_t                     *state;    /* UP , DOWN */
+    uint8_t                     state;    /* UP , DOWN */
     uint8_t                     locator_type:2;
     uint8_t                     priority;
     uint8_t                     weight;
@@ -57,10 +57,11 @@ typedef struct lcl_locator_extended_info_ {
 
 /*
  * Structure to expand lispd_locator_elt for remote locators
- */													/*
+ */
+/*
 typedef struct rmt_locator_extended_info_ {
     nonces_list                 *rloc_probing_nonces;
-}rmt_locator_extended_info;
+}rmt_locator_extended_info;*/
 
 
 /*
@@ -79,7 +80,7 @@ typedef struct lispd_locators_list_ {
 
 lispd_locator_elt   *new_local_locator (
         lisp_addr_t                 *locator_addr,
-        uint8_t                     *state,    /* UP , DOWN */
+        uint8_t                     state,    /* UP , DOWN */
         uint8_t                     priority,
         uint8_t                     weight,
         uint8_t                     mpriority,

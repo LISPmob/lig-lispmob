@@ -88,14 +88,6 @@ int add_map_server(
             (void *) *(hptr->h_addr_list), sizeof(lisp_addr_t));
     addr->afi = hptr->h_addrtype;
 
-    /*
-     * Check that the afi of the map server matches with the default rloc afi (if it's defined).
-     */
-    if (default_rloc_afi != -1 && default_rloc_afi != addr->afi){
-        lispd_log_msg(LISP_LOG_WARNING, "The map server %s will not be added due to the selected default rloc afi",map_server);
-        free(addr);
-        return(BAD);
-    }
 
     if ((list_elt = malloc(sizeof(lispd_map_server_list_t))) == NULL) {
         lispd_log_msg(LISP_LOG_WARNING, "add_map_server: Unable to allocate memory for lispd_map_server_list_t: %s", strerror(errno));

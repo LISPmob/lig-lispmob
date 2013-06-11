@@ -44,7 +44,7 @@ inline lcl_locator_extended_info *new_lcl_locator_extended_info(int out_socket);
 
 lispd_locator_elt   *new_local_locator (
         lisp_addr_t                 *locator_addr,
-        uint8_t                     *state,    /* UP , DOWN */
+        uint8_t                     state,    /* UP , DOWN */
         uint8_t                     priority,
         uint8_t                     weight,
         uint8_t                     mpriority,
@@ -111,7 +111,6 @@ void free_locator(lispd_locator_elt   *locator)
 //    }
     if (locator->locator_type != LOCAL_LOCATOR){
         free (locator->locator_addr);
-        free (locator->state);
     }
     free (locator);
 }

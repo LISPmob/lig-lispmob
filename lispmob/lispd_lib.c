@@ -260,15 +260,6 @@ lisp_addr_t *lispd_get_iface_address(
     struct sockaddr_in6 *s6;
     char addr_str[MAX_INET_ADDRSTRLEN];
 
-
-    if (default_rloc_afi != -1){ /* If forced a exact RLOC type (Just IPv4 of just IPv6) */
-        if(afi != default_rloc_afi){
-            lispd_log_msg(LISP_LOG_INFO,"Default RLOC afi defined: Skipped %s address in iface %s",
-                          (afi == AF_INET) ? "IPv4" : "IPv6",ifacename);
-            return (NULL);
-        }
-    }
-
     /* 
      * make sure this is clean
      */
@@ -310,7 +301,7 @@ lisp_addr_t *lispd_get_iface_address(
             // local addresses, in that case sin6_scope_id contains the interface index. --> If sin6_scope_id is
             // not zero, is a link-local address
             if (s6->sin6_scope_id != 0){
-                lispd_log_msg(LISP_LOG_DEBUG_1, "lispd_get_iface_address: interface address discarded (%s)",
+                lispd_log_msg(LISP_LOG_DEBUG_2, "lispd_get_iface_address: interface address discarded (%s)",
                                         inet_ntop(AF_INET6, &(s6->sin6_addr), addr_str, MAX_INET_ADDRSTRLEN));
                 continue;
             }

@@ -112,7 +112,7 @@ int get_up_locator_length(
     int sum = 0;
     int counter = 0;
     while (locators_list) {
-        if (*(locators_list->locator->state)== DOWN){
+        if (locators_list->locator->state== DOWN){
             locators_list = locators_list->next;
             continue;
         }
@@ -195,7 +195,7 @@ void *pkt_fill_eid(
         lcaf_ptr->rsvd1 = 0;
         lcaf_ptr->flags = 0;
         lcaf_ptr->type  = 2;
-        lcaf_ptr->rsvd2 = 0;    /* This can be IID mask-len, not yet supported *//*
+        lcaf_ptr->rsvd2 = 0;
         lcaf_ptr->len   = htons(sizeof(lispd_pkt_lcaf_iid_t) + eid_addr_len);
 
         iid_ptr->iid = htonl(mapping->iid);

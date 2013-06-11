@@ -35,6 +35,8 @@
 #include <syslog.h>
 #include <stdarg.h>
 
+int debug_level = 0;
+
 inline void lispd_log(
         int         log_level,
         char        *log_name,
@@ -48,7 +50,6 @@ void lispd_log_msg(
     va_list args;
     char *log_name; /* To store the log level in string format for printf output */
     int log_level;
-
 
     va_start (args, format);
 
@@ -110,13 +111,9 @@ inline void lispd_log(
         const char  *format,
         va_list     args)
 {
-    if (daemonize){
-        vsyslog(log_level,format,args);
-    }else{
-        printf("%s: ",log_name);
-        vfprintf(stdout,format,args);
-        printf("\n");
-    }
+    printf("%s: ",log_name);
+    vfprintf(stdout,format,args);
+    printf("\n");
 }
 
 /*

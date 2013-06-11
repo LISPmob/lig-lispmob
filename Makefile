@@ -40,12 +40,13 @@
 
 
 SRC      = lig.c send_map_request.c lib.c cksum.c print.c get_my_ip_addr.c \
-	   lispmob/lispd_config.c lispmob/lispd_lib.c lispmob/lispd_locator.c lispmob/lispd_log.c \
+	   lispmob/lispd_lib.c lispmob/lispd_locator.c lispmob/lispd_log.c \
 	   lispmob/lispd_mapping.c lispmob/lispd_map_register.c lispmob/lispd_pkt_lib.c \
-	   lispmob/lispd_sockets.c lispmob/lispd_iface_list.c
+	   lispmob/lispd_sockets.c lispmob/lispd_iface_list.c lispmob/lispd_config.c
 INC	 = lig.h lig-external.h lispmob/lispd_external.h lispmob/lispd.h lispmob/lispd_lib.h lispmob/lispd_log.h  \
 	   lispmob/lispd_locator.h lispmob/lispd_map_register.h  lispmob/lispd_mapping.h  \
-	   lispmob/lispd_pkt_lib.h lispmob/lispd_sockets.h lispmob/lispd_iface_list.h
+	   lispmob/lispd_pkt_lib.h lispmob/lispd_sockets.h lispmob/lispd_iface_list.h \
+	   lispmob/lispd_config.h
 OBJ	 = $(SRC:%.c=%.o)
 EXE      = lig
 #

@@ -56,7 +56,7 @@
 #include	<stdlib.h>
 #include	<errno.h>
 #include	<ctype.h>
-#include        <netdb.h>
+#include    <netdb.h>
 #include	<ifaddrs.h>
 #include	<strings.h>
 #include	<sys/types.h>
@@ -70,32 +70,30 @@
 #include	<arpa/inet.h>
 #include	<net/if.h>
 #include	<sys/ioctl.h>
+#include    "lispmob/lispd.h"
 
-typedef enum			{FALSE,TRUE} boolean;
+//typedef enum			{FALSE,TRUE} boolean;
 #define	uchar			u_char
 
-#define GOOD			0
-#define BAD			-1
-#define	MAX_IP_PACKET		4096
-#define	COUNT			3
-#define MIN_COUNT		1
-#define	MAX_COUNT		5
+#define	COUNT			    3
+#define MIN_COUNT		    1
+#define	MAX_COUNT		    5
 #define MAP_REPLY_TIMEOUT	2	/* seconds */
 #define	MIN_MR_TIMEOUT		1	/* seconds */
 #define	MAX_MR_TIMEOUT		5	/* seconds */
 #define	LISP_MAP_RESOLVER	"LISP_MAP_RESOLVER"
 #define LISP_MAP_SERVER		"LISP_MAP_SERVER"			//NEW
-#define	LOOPBACK		"127.0.0.1"
-#define	LOOPBACK6		"::1"
-#define	LINK_LOCAL		"fe80"
+#define	LOOPBACK		    "127.0.0.1"
+#define	LOOPBACK6		    "::1"
+#define	LINK_LOCAL		    "fe80"
 #define	LINK_LOCAL_LEN		4
 #define	V4EID		        "153.16"
-#define	V4EID_PREFIX_LEN        6	/* characters in "153.16" */
+#define	V4EID_PREFIX_LEN    6	/* characters in "153.16" */
 #define	V6EID		        "2610:00d0"
-#define	V6EID_PREFIX_LEN        9	/* characters in "2610:00d0" */
+#define	V6EID_PREFIX_LEN    9	/* characters in "2610:00d0" */
 #define	MIN_EPHEMERAL_PORT	32768
 #define	MAX_EPHEMERAL_PORT	65535
-#define MAX_IID                 16777215
+#define MAX_IID             16777215
 
 #define	USAGE	"      Usage:\nFor Map Request: %s [-b] [-c <count>] [-d] [-e] -m <RLOC> [-p <port>] \
 [-s <source address>] [-t <timeout>] [-u] [-v] [--probe] [--smr] [--smri] <EID>\n\nFor Encapsulated Map Request: ./lig [-b] \
@@ -117,18 +115,6 @@ typedef enum			{FALSE,TRUE} boolean;
 
 #define	VERSION "%s version 08.05.09\n"
 
-
-/*
- *	CO --
- *
- *	Calculate Offset
- *
- *	Try not to make dumb mistakes with
- *	pointer arithmetic
- *
- */
-
-#define	CO(addr,len) (((char *) addr + len))
 
 /*
  *      SA_LEN --
@@ -417,6 +403,7 @@ struct lisp_addrtype {
         struct in6_addr ipv6;
     } address;
 };
+
 
 
 /*

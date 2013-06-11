@@ -402,7 +402,7 @@ int select_best_priority_locators (
 
     while (list_elt!=NULL){
         /* Only use locators with status UP */
-        if (*(list_elt->locator->state)==DOWN){
+        if (list_elt->locator->state==DOWN){
             list_elt = list_elt->next;
             continue;
         }

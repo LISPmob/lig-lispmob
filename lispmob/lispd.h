@@ -304,7 +304,7 @@ typedef struct _lispd_weighted_addr_list_t {
 
 
 
-typedef struct _lispd_map_server_list_t {                   
+typedef struct _lispd_map_server_list_t {
     lisp_addr_t                     *address;
     uint8_t                         key_type;
     char                            *key;

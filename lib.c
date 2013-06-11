@@ -55,16 +55,16 @@
  */
 
 long tvdiff(last,first)
-	struct timeval *last; 
-	struct timeval *first;
+struct timeval *last;
+struct timeval *first;
 {
 
-  long	diff;
+    long	diff;
 
-  diff = ((last->tv_sec - first->tv_sec) * 1000) +
-         ((last->tv_usec - first->tv_usec)/1000);
+    diff = ((last->tv_sec - first->tv_sec) * 1000) +
+            ((last->tv_usec - first->tv_usec)/1000);
 
-  return((diff > 0) ? diff : 0);
+    return((diff > 0) ? diff : 0);
 }
 
 /*
@@ -74,9 +74,9 @@ long tvdiff(last,first)
  *
  */
 
-int wait_for_response(s,timeout)
-  int s;
-  int timeout;
+int wait_for_response(
+        int s,
+        int timeout)
 {
 
     struct timeval tv;
@@ -89,13 +89,13 @@ int wait_for_response(s,timeout)
     FD_SET(s,&readfds);
 
     if (select(s+1,&readfds,NULL,NULL,&tv) == -1) {
-	perror("select");
-	exit(BAD);
+        perror("select");
+        exit(BAD);
     } 
     if (FD_ISSET(s,&readfds)) 
-	return(1);		    /* got something */
+        return(1);		    /* got something */
     else 
-	return(0);		    /* else we timed out */
+        return(0);		    /* else we timed out */
 }
 
 /*
@@ -103,10 +103,10 @@ int wait_for_response(s,timeout)
  */
 
 int get_map_reply(r,packet,afi,from)
-	int			r;
-	uchar			*packet;
-	int			afi;
-	struct sockaddr		*from;
+int			r;
+uchar			*packet;
+int			afi;
+struct sockaddr		*from;
 {
 
     socklen_t fromlen = SA_LEN(afi);
@@ -114,21 +114,21 @@ int get_map_reply(r,packet,afi,from)
     memset((char *) from, 0, fromlen);
 
     if (recvfrom(r,
-		 packet,
-		 MAX_IP_PACKET,
-		 0,
-		 from,
-		 &fromlen) < 0) {
-	perror("recvfrom");
-	exit(BAD);
+            packet,
+            MAX_IP_PACKET,
+            0,
+            from,
+            &fromlen) < 0) {
+        perror("recvfrom");
+        exit(BAD);
     }
- 
-    if (((struct map_reply_pkt *) packet)->lisp_type == LISP_MAP_REPLY)
-	return(1);
-    
-    if (debug)
-	printf("Packet not a Map Reply (0x%x)\n", ((struct map_reply_pkt *) packet)->lisp_type);
+    if (((struct map_reply_pkt *) packet)->lisp_type == LISP_MAP_REPLY){
+        return(1);
+    }
 
+    if (debug){
+        printf("Packet not a Map Reply (0x%x)\n", ((struct map_reply_pkt *) packet)->lisp_type);
+    }
     return(0);
 }
 
@@ -143,10 +143,10 @@ int get_map_reply(r,packet,afi,from)
  */
 
 void build_nonce(nonce,i,nonce0,nonce1)
-     unsigned int	*nonce;
-     int		i;
-     unsigned int	*nonce0;
-     unsigned int	*nonce1;
+unsigned int	*nonce;
+int		i;
+unsigned int	*nonce0;
+unsigned int	*nonce1;
 {
     nonce[2*i]     = *nonce0 = random()^random();
     nonce[(2*i)+1] = *nonce1 = random()^time(NULL);
@@ -165,18 +165,18 @@ void build_nonce(nonce,i,nonce0,nonce1)
  */
 
 int find_nonce(map_reply, nonce, count)
-  struct   map_reply_pkt *map_reply;
-  unsigned int	         *nonce;
-  int		          count;
+struct   map_reply_pkt *map_reply;
+unsigned int	         *nonce;
+int		          count;
 
 {
     int i;
 
     for (i = 0; i <= count; i++) {
-	if ((ntohl(map_reply->lisp_nonce0) == nonce[(2*i)]) &&
-	    (ntohl(map_reply->lisp_nonce1) == nonce[(2*i)+1])) {
-	    return(1);			/* good nonce */
-	}
+        if ((ntohl(map_reply->lisp_nonce0) == nonce[(2*i)]) &&
+                (ntohl(map_reply->lisp_nonce1) == nonce[(2*i)+1])) {
+            return(1);			/* good nonce */
+        }
     }	  
     return(0);				/* nope...*/
 }
