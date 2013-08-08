@@ -152,8 +152,8 @@
 #define uchar           u_char
 
 int err;
-#define GOOD                1
-#define BAD                 0
+#define GOOD                0
+#define BAD                 1
 #define ERR_CTR_IFACE       0
 #define ERR_SRC_ADDR        0
 #define ERR_AFI             0
