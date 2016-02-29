@@ -53,6 +53,7 @@
 
 #include	"lig.h"
 #include	"lig-external.h"
+#include    "send_map_request.h"
 
 #include 	"lispmob/lispd_iface_list.h"
 #include 	"lispmob/lispd_external.h"
@@ -87,9 +88,9 @@ struct map_reply_pkt	*map_reply;
  */
 
 unsigned int udp_checksum_disabled	= 0;
-unsigned int disallow_eid		    = 0;
 unsigned int debug			        = 0;
 unsigned int machinereadable		= 0;
+unsigned int disallow_eid           = 0;
 unsigned int mreg			        = 0;			// used to specify it is a map-register message
 int32_t      iid			        = -1;
 int 	     encapsulate		    = 1;
@@ -126,6 +127,7 @@ int main(int argc, char *argv[])
 
     char *eid		    = NULL;
     char *src_ip_addr	= NULL;
+    char *src_eid_addr  = NULL;
     char *eid_name	    = NULL;
     char *mr_name	    = NULL;
     char *progname	    = NULL;
@@ -135,6 +137,8 @@ int main(int argc, char *argv[])
     int  mr_addrtype	= 0;
     int  mr_length	    = 0;
 
+    struct sockaddr *src_eid_ptr = NULL;
+    struct sockaddr_storage src_eid;
     struct sockaddr_storage eid_addr;
     struct sockaddr_storage map_resolver_addr;
 
@@ -233,7 +237,8 @@ int main(int argc, char *argv[])
             {"probe",	    no_argument,		0, 'o'},
             {"smr",		    no_argument,		0, 'q'},
             {"smri",	    no_argument,		0, 'n'},
-            {"noencap",	    no_argument,		0, 'l'}
+            {"noencap",	    no_argument,		0, 'l'},
+            {"srceid",      required_argument,  0, 'f'}
     };
 
     while ((opt = getopt_long (argc, argv, optstring, long_options, &longindex)) != -1) {
@@ -330,6 +335,12 @@ int main(int argc, char *argv[])
             break;
         case 'e':
             disallow_eid = 1;
+            break;
+        case 'f':
+            if ((src_eid_addr = strdup(optarg)) == NULL) {
+                perror ("strdup(src_eid_addr)");
+                exit(BAD);
+            }
             break;
         case 'i':
             iid = atoi(optarg);
@@ -590,12 +601,27 @@ int main(int argc, char *argv[])
             }
             memcpy(&my_addr, res->ai_addr, res->ai_addrlen);
             freeaddrinfo(res);
-        } else
+        } else{
             if (get_my_ip_addr(mr_addrtype,&my_addr)) {
                 fprintf(stderr, "No usable %s source address\n",
                         (mr_addrtype == AF_INET) ? "IPv4" : "IPv6");
                 exit(BAD);
             }
+        }
+
+        if (src_eid_addr) {
+            if ((e = getaddrinfo(src_eid_addr, NULL, &hints, &res)) != 0) {
+                fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(e));
+                exit(BAD);
+            }
+            memcpy(&src_eid, res->ai_addr, res->ai_addrlen);
+            freeaddrinfo(res);
+            src_eid_ptr = (struct sockaddr *)&src_eid;
+        }
+
+
+
+
 
 
         if (debug) {
@@ -629,7 +655,7 @@ int main(int argc, char *argv[])
             perror("socket_creation:");
             exit(BAD);
         }
-        if ( (ctrl_socket = bind_socket(ctrl_socket,mr_addrtype,emr_inner_src_port)) == BAD){
+        if ( (ctrl_socket = bind_socket(ctrl_socket,mr_addrtype,4342)) == BAD){
             perror("bind");
             exit(BAD);
         }
@@ -679,9 +705,9 @@ int main(int argc, char *argv[])
                     nonce1,
                     &before,
                     (struct sockaddr *)&eid_addr,
-                    iid,
                     (struct sockaddr *)&map_resolver_addr,
                     (struct sockaddr *)&my_addr,
+                    src_eid_ptr,
                     encapsulate) == BAD) {
                 fprintf(stderr, "send_map_request: can't send map-request\n");
                 exit(BAD);

@@ -95,7 +95,7 @@
 #define	MAX_EPHEMERAL_PORT	65535
 #define MAX_IID             16777215
 
-#define	USAGE	"      Usage:\nFor Map Request: %s [-b] [-c <count>] [-d] [-e] -m <RLOC> [-p <port>] \
+#define	USAGE	"      Usage:\nFor Map Request: %s [-b] [-c <count>] [-d] [-e] -m <RLOC> [-p <port>] [--srceid <source eid address>] \
 [-s <source address>] [-t <timeout>] [-u] [-v] [--probe] [--smr] [--smri] <EID>\n\nFor Encapsulated Map Request: ./lig [-b] \
 [-c <count>] [-d] [-e] -m <Map Resolver> [-p <port>] [-s <source address>] [-t <timeout>] [-u] [-v] [--mrauth] [--smri] <EID>\n \
 \nFor Map Register: ./lig -r -m <Map Server> --eidpref <EID> --eidmlen <EID mask length> --pass <password> \
@@ -252,38 +252,31 @@ struct map_request_pkt {
 	uchar           map_data_present:1;
 	uchar           rloc_probe:1;
 	uchar           smr_bit:1;
-
-
 #endif
 #ifdef LITTLE_ENDIAN
 	uchar           reserved1:6;
-	uchar		smr_invoked:1;
-	uchar		proxy_itr:1;
+	uchar		    smr_invoked:1;
+	uchar		    proxy_itr:1;
 #else
-	uchar		proxy_itr:1;
-	uchar		smr_invoked:1;
+	uchar		    proxy_itr:1;
+	uchar		    smr_invoked:1;
 	uchar           reserved1:6;
 #endif	
 #ifdef LITTLE_ENDIAN
 	ushort          irc:5;
-        uchar           reserved2:3;
+    uchar           reserved2:3;
 #else
-        uchar           reserved2:3;
+    uchar           reserved2:3;
 	ushort          irc:5;
 #endif
 	uchar           record_count;
 	unsigned int    lisp_nonce0;
 	unsigned int    lisp_nonce1;
-	ushort          source_eid_afi;
-	ushort          itr_afi;
-        uchar           originating_itr_rloc[0];
 } __attribute__ ((__packed__));
 
-struct map_request_eid {
+struct map_request_rec {
 	uchar 		reserved;
 	uchar 		eid_mask_len;
-	ushort		eid_prefix_afi;
-        uchar           eid_prefix[0];
 } __attribute__ ((__packed__));
 
 struct lcaf {
@@ -299,6 +292,7 @@ struct lcaf_iid {
         uint16_t        afi;
         uchar           eid_prefix[0];
 } __attribute__ ((__packed__));
+
 
 
 /* 
