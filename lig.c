@@ -307,8 +307,8 @@ int main(int argc, char *argv[])
                     free(locator_addr);
                     exit(BAD);
                 }
-                if ( add_locator_to_mapping(mapping, locator) == 0 ) {							//add the locator element to the mapping
-                    lispd_log_msg(LISP_LOG_ERR, "add_locator_to_mapping");
+                if ( add_locator_to_mapping(mapping, locator) != GOOD ) {							//add the locator element to the mapping
+                    lispd_log_msg(LISP_LOG_ERR, "Error adding locator to the mapping");
                     exit(BAD);
                 }
                 set_locator_defaults(&priority, &weight, &mpriority, &mweight, &reach);					//reset the locator parameters for the next entry
@@ -446,8 +446,8 @@ int main(int argc, char *argv[])
             lispd_log_msg(LISP_LOG_ERR, "new_map_server");
             exit(BAD);
         }
-        if(map_register(mapping) == 0) {
-            lispd_log_msg(LISP_LOG_ERR, "map_register");
+        if(map_register(mapping) != GOOD) {
+            lispd_log_msg(LISP_LOG_ERR, "Couldn't send map register");
             exit(BAD);
         }
         printf("\nSent Map-Register to %s for %s/%d\n\n", map_server_addr, eidpref, eid_prefix_length);
