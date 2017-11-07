@@ -65,7 +65,7 @@ MISC     = Makefile README
 #	compile/load options
 #
 CC	 = gcc
-CFLAGS   = -Wall -g -Wno-implicit-function-declaration
+CFLAGS   = -Wall -std=gnu89 -g -Wno-implicit-function-declaration
 LDLIBS   = -lcrypto -lssl -lrt -lm
 LDFLAGS  = 
 #

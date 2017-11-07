@@ -132,8 +132,6 @@ int main(int argc, char *argv[])
     char *mr_name	    = NULL;
     char *progname	    = NULL;
     char *map_resolver	= getenv(LISP_MAP_RESOLVER); /* check for env var */
-    int  eid_addrtype	= 0;
-    int  eid_length	    = 0;
     int  mr_addrtype	= 0;
     int  mr_length	    = 0;
 
@@ -178,7 +176,6 @@ int main(int argc, char *argv[])
     int             count		            = COUNT;
     int	            timeout	                = MAP_REPLY_TIMEOUT;
     unsigned int    port	                = 0;		/* if -p <port> specified, put it in here to find overflow */
-    char  emr_inner_src_port_str[NI_MAXSERV];
     emr_inner_src_port                      = 0;
 
 
@@ -530,14 +527,7 @@ int main(int argc, char *argv[])
             exit(BAD);
         }
 
-        /*
-         *  Save the eid, eid_addr, eid_addrtype
-         *
-         */
-
         if (res != NULL) {
-            eid_addrtype = res->ai_family;
-            eid_length = res->ai_addrlen;
             if ((e = getnameinfo(res->ai_addr,res->ai_addrlen,
                     buf,NI_MAXHOST,NULL,0,NI_NUMERICHOST)) != 0) {
                 fprintf(stderr,"getnameinfo: %s\n",gai_strerror(e));
