@@ -208,10 +208,10 @@ void print_map_reply(map_reply,requested_eid,mr_to,mr_from,elapsed_time)
     int				   locator         = 0;
 
     if (machinereadable) 
-           printf("RECEIVED_FROM=%s\nRTT=%2.5f\n", mr_from, (double) elapsed_time/1000);
+           printf("RECEIVED_FROM=%s\nRTT=%f\n", mr_from, (double) elapsed_time/1000000);
     else 
-           printf("Received map-reply from %s with rtt %2.5f secs\n",
-	   mr_from, (double) elapsed_time/1000);
+           printf("Received map-reply from %s with rtt %f secs\n",
+                   mr_from, (double) elapsed_time/1000000);
 
     if (!machinereadable)   
     printf("\nMapping entry for EID '%s':\n", requested_eid);

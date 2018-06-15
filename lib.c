@@ -49,7 +49,7 @@
 /*
  *	tvdiff(last,first) --
  *
- *	Return the difference of 2 timeval structs in ms. Assume
+ *	Return the difference of 2 timeval structs in us. Assume
  *	last >= first or its 0.
  *
  */
@@ -61,8 +61,8 @@ struct timeval *first;
 
     long	diff;
 
-    diff = ((last->tv_sec - first->tv_sec) * 1000) +
-            ((last->tv_usec - first->tv_usec)/1000);
+    diff = ((last->tv_sec - first->tv_sec) * 1000000) +
+        ((last->tv_usec - first->tv_usec));
 
     return((diff > 0) ? diff : 0);
 }
