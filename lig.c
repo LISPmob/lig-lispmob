@@ -702,7 +702,7 @@ int main(int argc, char *argv[])
                 fprintf(stderr, "send_map_request: can't send map-request\n");
                 exit(BAD);
             }
-
+recv_packet:
             if (wait_for_response(ctrl_socket,timeout)) {
                 if (gettimeofday(&after,NULL) == -1) {
                     perror("gettimeofday");
@@ -733,7 +733,7 @@ int main(int argc, char *argv[])
                             ntohl(map_reply->lisp_nonce0),
                             nonce1,
                             ntohl(map_reply->lisp_nonce1));
-                    continue;			/* try again if count left */
+                    goto recv_packet;
                 }
 
             }					/* timed out */
