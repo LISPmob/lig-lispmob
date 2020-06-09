@@ -95,7 +95,7 @@
 #define	MAX_EPHEMERAL_PORT	65535
 #define MAX_IID             16777215
 
-#define	USAGE	"      Usage:\nFor Map Request: %s [-b] [-c <count>] [-d] [-e] -m <RLOC> [-p <port>] [--srceid <source eid address>] \
+#define	USAGE	"      Usage:\nFor Map Request: %s [-b] [-w] [-c <count>] [-d] [-e] -m <RLOC> [-p <port>] [--srceid <source eid address>] \
 [-s <source address>] [-t <timeout>] [-u] [-v] [--probe] [--smr] [--smri] <EID>\n\nFor Encapsulated Map Request: ./lig [-b] \
 [-c <count>] [-d] [-e] -m <Map Resolver> [-p <port>] [-s <source address>] [-t <timeout>] [-u] [-v] [--mrauth] [--smri] <EID>\n \
 \nFor Map Register: ./lig -r -m <Map Server> --eidpref <EID> --eidmlen <EID mask length> --pass <password> \

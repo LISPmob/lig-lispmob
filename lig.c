@@ -134,6 +134,7 @@ int main(int argc, char *argv[])
     char *map_resolver	= getenv(LISP_MAP_RESOLVER); /* check for env var */
     int  mr_addrtype	= 0;
     int  mr_length	    = 0;
+    int  wait_for_reply = TRUE;
 
     struct sockaddr *src_eid_ptr = NULL;
     struct sockaddr_storage src_eid;
@@ -212,7 +213,7 @@ int main(int argc, char *argv[])
      */  
 
     int  opt		= 0;
-    char *optstring	= "bc:dei:m:p:t:s:uvr";
+    char *optstring	= "bwc:dei:m:p:t:s:uvr";
     int longindex	= 0;
     static struct option long_options[] = {
             {"noproxy", 	no_argument,		0, '0'},
@@ -235,11 +236,15 @@ int main(int argc, char *argv[])
             {"smr",		    no_argument,		0, 'q'},
             {"smri",	    no_argument,		0, 'n'},
             {"noencap",	    no_argument,		0, 'l'},
-            {"srceid",      required_argument,  0, 'f'}
+            {"srceid",      required_argument,  0, 'f'},
+            {"nowait", 	    no_argument,		0, 'w'}
     };
 
     while ((opt = getopt_long (argc, argv, optstring, long_options, &longindex)) != -1) {
         switch (opt) {
+        case 'w':
+            wait_for_reply = FALSE;
+	    break;
         case '0':
             proxy = 0;			// Proxy Reply bit
             break;
@@ -701,6 +706,9 @@ int main(int argc, char *argv[])
                     encapsulate) == BAD) {
                 fprintf(stderr, "send_map_request: can't send map-request\n");
                 exit(BAD);
+            }
+            if (wait_for_reply == FALSE){
+                exit(GOOD);
             }
 recv_packet:
             if (wait_for_response(ctrl_socket,timeout)) {
